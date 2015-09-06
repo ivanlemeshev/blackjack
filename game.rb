@@ -1,13 +1,10 @@
 class Game
   def self.init
-    deck = self.generate_deck
-    deck.shuffle
-  end
-
-  private
-
-  def self.generate_deck
-    cards = []
-    Deck.new(cards)
+    puts 'Welcode to the Blackjack game!'
+    print 'Please enter your name: '
+    player_name = gets.chomp
+    dealer = Dealer.new('Dealer')
+    player = Player.new(player_name)
+    puts "Hi, #{player.name}!"
   end
 end
