@@ -1,4 +1,4 @@
-class Person
+class User
   def initialize(name)
     @name = name
     @balance = 100
