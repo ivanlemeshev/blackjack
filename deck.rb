@@ -7,6 +7,10 @@ class Deck
     @cards.shuffle!
   end
 
+  def deal_cards(count)
+    @cards.sample(count).each { |value| @cards.delete(value) }
+  end
+
   private
 
   def generate_cards
