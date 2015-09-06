@@ -1,8 +1,8 @@
-require_relative './deck.rb'
-require_relative './card.rb'
-require_relative './person.rb'
-require_relative './dealer.rb'
-require_relative './player.rb'
-require_relative './game.rb'
+require_relative 'deck'
+require_relative 'card'
+require_relative 'user'
+require_relative 'dealer'
+require_relative 'player'
+require_relative 'game'
 
 Game.init
