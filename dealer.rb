@@ -1,1 +1,1 @@
-class Dealer < Person; end
+class Dealer < User; end
