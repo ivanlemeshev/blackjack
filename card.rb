@@ -1,8 +1,8 @@
 class Card
-  SUIT_HEARTS   = '<3'
-  SUIT_CLUBS    = '+'
-  SUIT_DIAMONDS = '<>'
-  SUIT_SPADES   = '^'
+  SUIT_HEARTS   = '♥'
+  SUIT_CLUBS    = '♣'
+  SUIT_DIAMONDS = '♦'
+  SUIT_SPADES   = '♠'
 
   VALUE_TWO   = '2'
   VALUE_THREE = '3'
