@@ -1,5 +1,5 @@
 class Card
-  SUIT_HEARTS   = '3>'
+  SUIT_HEARTS   = '<3'
   SUIT_CLUBS    = '+'
   SUIT_DIAMONDS = '<>'
   SUIT_SPADES   = '^'
