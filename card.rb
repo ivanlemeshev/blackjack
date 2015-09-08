@@ -1,8 +1,8 @@
 class Card
-  SUIT_HEARTS   = '♥'
-  SUIT_CLUBS    = '♣'
-  SUIT_DIAMONDS = '♦'
-  SUIT_SPADES   = '♠'
+  SUIT_HEARTS   = '♡'
+  SUIT_CLUBS    = '♧'
+  SUIT_DIAMONDS = '♢'
+  SUIT_SPADES   = '♤'
 
   VALUE_TWO   = '2'
   VALUE_THREE = '3'
@@ -17,6 +17,8 @@ class Card
   VALUE_QUEEN = 'Q'
   VALUE_KING  = 'K'
   VALUE_ACE   = 'A'
+
+  attr_reader :suit, :value
 
   def initialize(suit, value)
     @suit = suit

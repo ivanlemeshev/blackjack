@@ -15,7 +15,13 @@ class Game
     player.add_cards(deck.deal_cards(2))
     dealer.add_cards(deck.deal_cards(2))
 
-    p player
-    p dealer
+    print "\n"
+    dealer.cards.each { |card| printf("%4s", "*") }
+    print "\n"
+    print "\n"
+    player.cards.each { |card| printf("%4s", "#{card.value}#{card.suit}") }
+    puts "\tscore: #{player.score}"
+    print "\n"
+    print "\n"
   end
 end
