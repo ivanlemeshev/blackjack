@@ -1,29 +1,51 @@
 class User
+  WIN_SCORE = 21
+  BET_AMOUNT = 10
+  DEFAULT_VALUE = 10
+  ACE_MIN_VALUE = 1
+  ACR_MAX_VALUE = 11
+  INITIALIZE_BALANCE = 100
+
   attr_reader :name, :cards
 
   def initialize(name)
     @name = name
-    @balance = 100
+    @balance = INITIALIZE_BALANCE
     @cards = []
   end
 
   def add_cards(cards)
-    @cards.concat(cards)
+    self.cards.concat(cards)
   end
 
   def score
     score = 0
-    @cards.each do |card|
-      case card.value
-      when 'J' then value = 11
-      when 'Q' then value = 12
-      when 'K' then value = 13
-      when 'A' then value = 14
+
+    self.cards.each do |card|
+      if ['J', 'Q', 'K'].include? card.value
+        value = DEFAULT_VALUE
       else
         value = card.value.to_i
       end
       score += value
     end
+
+    self.cards.each do |card|
+      if card.value == 'A' && score + ACE_MIN_VALUE > WIN_SCORE
+        score += ACE_MIN_VALUE
+      elsif card.value == 'A' && score + ACE_MIN_VALUE < WIN_SCORE
+        score += ACR_MAX_VALUE
+      end
+    end
+
     score
+  end
+
+  def make_bet
+    @balance -= BET_AMOUNT if @balance > 0
+  end
+
+  def take_money(amount)
+    @balance += amount
   end
 end
