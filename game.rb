@@ -58,42 +58,12 @@ class Game
       end
     end
 
-    print_opened_cards
-    print_dealer_score
-    print_player_score
-    print_bank
-    self.class.print_new_line
+    open_cards
 
-    if self.dealer.score == self.player.score
-      self.class.print_message('Drawn game.')
-      amount = self.bank / 2.0
-      self.dealer.take_money(amount)
-      self.player.take_money(amount)
-    elsif self.dealer.score == 21
-      self.class.print_message('Dealer win!')
-      self.dealer.take_money(self.bank)
-    elsif self.player.score == 21
-      self.class.print_message('You win!')
-      self.player.take_money(self.bank)
-    elsif (21 - self.player.score).abs < (21 - self.dealer.score).abs
-      self.class.print_message('You win!')
-      self.player.take_money(self.bank)
-    else
-      self.class.print_message('Dealer win!')
-      self.dealer.take_money(self.bank)
+    if (self.player.balance > 0 && self.dealer.balane > 0)
+      self.class.print_message('Press any key to continue...')
+      gets
     end
-
-    self.bank = 0
-    self.player.clear_cards
-    self.dealer.clear_cards
-
-    self.class.print_new_line
-    puts "Your balance: #{self.player.balance}"
-    puts "Dealer balance: #{self.dealer.balance}"
-    self.class.print_new_line
-
-    self.class.print_message('Press any key to continue...')
-    gets
   end
 
   def player_move
@@ -141,6 +111,42 @@ class Game
       self.class.print_message('Open cards.')
       self.game_over = true
     end
+  end
+
+  def open_cards
+    print_opened_cards
+    print_dealer_score
+    print_player_score
+    print_bank
+    self.class.print_new_line
+
+    if self.dealer.score == self.player.score
+      self.class.print_message('Drawn game.')
+      amount = self.bank / 2.0
+      self.dealer.take_money(amount)
+      self.player.take_money(amount)
+    elsif self.dealer.score == 21
+      self.class.print_message('Dealer win!')
+      self.dealer.take_money(self.bank)
+    elsif self.player.score == 21
+      self.class.print_message('You win!')
+      self.player.take_money(self.bank)
+    elsif (21 - self.player.score).abs < (21 - self.dealer.score).abs
+      self.class.print_message('You win!')
+      self.player.take_money(self.bank)
+    else
+      self.class.print_message('Dealer win!')
+      self.dealer.take_money(self.bank)
+    end
+
+    self.bank = 0
+    self.player.clear_cards
+    self.dealer.clear_cards
+
+    self.class.print_new_line
+    puts "Your balance: #{self.player.balance}"
+    puts "Dealer balance: #{self.dealer.balance}"
+    self.class.print_new_line
   end
 
   def deal_cards
