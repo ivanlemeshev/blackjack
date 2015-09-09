@@ -52,6 +52,9 @@ class Game
       dealer_move
 
       if self.player.cards.size == 3 && self.dealer.cards.size == 3
+        print_closed_cards
+        print_player_score
+        print_bank
         self.class.print_new_line
         self.class.print_message('Open cards.')
         self.game_over = true
@@ -60,7 +63,7 @@ class Game
 
     open_cards
 
-    if (self.player.balance > 0 && self.dealer.balane > 0)
+    if (self.player.balance > 0 && self.dealer.balance > 0)
       self.class.print_message('Press any key to continue...')
       gets
     end
