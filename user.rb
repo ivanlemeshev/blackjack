@@ -6,7 +6,7 @@ class User
   ACR_MAX_VALUE = 11
   INITIALIZE_BALANCE = 100
 
-  attr_reader :name, :cards
+  attr_reader :name, :cards, :balance
 
   def initialize(name)
     @name = name
@@ -15,7 +15,11 @@ class User
   end
 
   def add_cards(cards)
-    self.cards.concat(cards)
+    @cards.concat(cards)
+  end
+
+  def clear_cards
+    @cards = []
   end
 
   def score
