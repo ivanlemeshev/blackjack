@@ -1,5 +1,5 @@
 class Game
-  WIN_SCORE_COUNT = 21
+  WIN_SCORE = 21
   START_DEAL_CARDS_COUNT = 2
   GAME_DEAL_CARDS_COUNT = 1
 
@@ -49,6 +49,18 @@ class Game
     end
   end
 
+  def deal_cards
+    @player.add_cards(@deck.deal_cards(START_DEAL_CARDS_COUNT))
+    @dealer.add_cards(@deck.deal_cards(START_DEAL_CARDS_COUNT))
+  end
+
+  def make_bets
+    @dealer.make_bet
+    self.bank += Dealer::BET_AMOUNT
+    @player.make_bet
+    self.bank += Player::BET_AMOUNT
+  end
+
   def player_move
     show_info
     ask_player_command
@@ -58,59 +70,49 @@ class Game
 
   def ask_player_command
     puts 'What do you want to do?'
-    puts 'Enter "pass" to pass the move.' unless @player_passed_the_move
-    puts 'Enter "card" to get one card.' unless @player_took_the_card
+    puts 'Enter "pass" to pass the move.' unless @player.passed_the_move
+    puts 'Enter "card" to get one card.' unless @player.took_the_card
     puts 'Enter "open" to open cards.'
   end
 
   def process_player_command(command)
     if player_can_pass?(command)
-      player_pass_move
+      @player.pass_move
     elsif player_can_take_card?(command)
-      player_take_card
+      @player.take_card(@deck.deal_cards(GAME_DEAL_CARDS_COUNT))
     else
-      player_open_cards
+      @player.open_cards
+      self.game_over = true
     end
   end
 
   def player_can_pass?(command)
-    command == 'pass' && !@player_passed_the_move
+    command == 'pass' && !@player.passed_the_move
   end
 
   def player_can_take_card?(command)
-    command == 'card' && !@player_took_the_card
-  end
-
-  def player_pass_move
-    Output.print_message("#{@player.name} passed the move.")
-    self.player_passed_the_move = true
-  end
-
-  def player_take_card
-    Output.print_message("#{@player.name} got one card.")
-    @player.add_cards(@deck.deal_cards(GAME_DEAL_CARDS_COUNT))
-    self.player_took_the_card = true
-  end
-
-  def player_open_cards
-    Output.print_message('Open cards.')
-    self.game_over = true
+    command == 'card' && !@player.took_the_card
   end
 
   def dealer_move
     show_info
 
-    if dealer.score >= 18 && !@dealer_passed_the_move
-      Output.print_message('Dealer pass the move.')
-      self.dealer_passed_the_move = true
-    elsif !@dealer_took_the_card
-      Output.print_message('Dealer get one card.')
-      @dealer.add_cards(@deck.deal_cards(GAME_DEAL_CARDS_COUNT))
-      self.dealer_took_the_card = true
+    if dealer_can_pass?
+      @dealer.pass_move
+    elsif dealer_can_take_card?
+      @dealer.take_card(@deck.deal_cards(GAME_DEAL_CARDS_COUNT))
     else
-      Output.print_message('Open cards.')
+      @dealer.open_cards
       self.game_over = true
     end
+  end
+
+  def dealer_can_pass?
+    @dealer.score >= 18 && !@dealer.passed_the_move
+  end
+
+  def dealer_can_take_card?
+    !@dealer.took_the_card
   end
 
   def open_cards
@@ -121,13 +123,13 @@ class Game
       amount = @bank / 2.0
       @dealer.take_money(amount)
       @player.take_money(amount)
-    elsif @dealer.score == WIN_SCORE_COUNT
+    elsif @dealer.score == WIN_SCORE
       Output.print_message("#{@dealer.name} win!")
       @dealer.take_money(@bank)
-    elsif @player.score == WIN_SCORE_COUNT
+    elsif @player.score == WIN_SCORE
       Output.print_message("#{@player.name} win!")
       @player.take_money(@bank)
-    elsif (WIN_SCORE_COUNT - @player.score).abs < (21 - @dealer.score).abs
+    elsif (WIN_SCORE - @player.score).abs < (WIN_SCORE - @dealer.score).abs
       Output.print_message("#{@player.name} win!")
       @player.take_money(@bank)
     else
@@ -143,16 +145,10 @@ class Game
     @dealer.show_balance
   end
 
-  def deal_cards
-    @player.add_cards(@deck.deal_cards(START_DEAL_CARDS_COUNT))
-    @dealer.add_cards(@deck.deal_cards(START_DEAL_CARDS_COUNT))
+  def player_win?
   end
 
-  def make_bets
-    @dealer.make_bet
-    self.bank += Dealer::BET_AMOUNT
-    @player.make_bet
-    self.bank += Player::BET_AMOUNT
+  def dealer_win?
   end
 
   def show_info
