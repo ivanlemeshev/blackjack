@@ -31,11 +31,11 @@ module GameInput
 
   def confirm_open_cards
     Message.show('Press any key to open cards...')
-    prompt
+    gets
   end
 
   def confirm_start_new_game
     Message.show('Press any key to continue...')
-    prompt
+    gets
   end
 end

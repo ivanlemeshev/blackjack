@@ -1,5 +1,5 @@
 class Dealer < User
-  THINKING_TIME = 1
+  THINKING_TIME = 2
   PASS_SCORE = 18
 
   def initialize(name = 'Dealer')

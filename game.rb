@@ -3,9 +3,13 @@ class Game
   include GameOutput
 
   def initialize
-    trap('INT') { game_over }
-    greeting
-    show_commands
+    game_greeting
+    @player = Player.new(player_name)
+    player_greeting(@player.name)
+    @dealer = Dealer.new
+    @hand = Hand.new
+    trap('INT') { exit_game }
+    show_base_commands
     while (code = prompt)
       process_prompt(code)
     end
@@ -19,20 +23,18 @@ class Game
     if code == 'n'
       start_game
     elsif code == 'q'
-      game_over
+      exit_game
     else
       puts "Sorry, I don't understand."
     end
   end
 
-  def start_game
-    name = player_name
-    @player = Player.new(name)
-    Message.show("Hi, #{name}")
-    @dealer = Dealer.new
-    @hand = Hand.new
+  def players_can_play?
+    @player.balance == 0 || @dealer.balance == 0
+  end
 
-    until @player.balance == 0 || @dealer.balance == 0
+  def start_game
+    Message.show('Starting a new game.')
       @bank = 0
       @game_over = false
       make_bets
@@ -44,7 +46,6 @@ class Game
         stop_game if players_cards_limit_reached?
       end
       open_cards
-    end
   end
 
   def make_bets
@@ -102,6 +103,8 @@ class Game
 
     @player.show_balance
     @dealer.show_balance
+
+    show_base_commands
   end
 
   def determine_winner
