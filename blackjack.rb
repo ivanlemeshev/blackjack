@@ -10,8 +10,14 @@ require_relative 'game'
 Output.print_message('Welcode to the Blackjack game!')
 Output.print_new_line
 
-puts 'Please enter your name.'
-player_name = gets.chomp
+begin
+  puts 'Please enter your name.'
+  player_name = gets.chomp
+  fail if player_name.empty?
+rescue
+  puts 'Player name cannot be blank.'
+  retry
+end
 
 player = Player.new(player_name)
 
@@ -21,9 +27,10 @@ Output.print_message("Hi, #{player.name}!")
 dealer = Dealer.new('Dealer')
 
 until dealer.balance == 0 || player.balance == 0
-  Game.new(Deck.new, dealer, player)
+  Output.print_new_line
   Output.print_message('Press any key to play a new game...')
   gets
+  Game.new(Deck.new, dealer, player)
 end
 
 Output.print_message('GAME OVER!')

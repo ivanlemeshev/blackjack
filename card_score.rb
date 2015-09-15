@@ -14,6 +14,14 @@ module CardScore
     add_additional_ace_score(total_score, ace_count)
   end
 
+  def win_score?
+    score == WIN_SCORE
+  end
+
+  def score_difference
+    (WIN_SCORE - score).abs
+  end
+
   protected
 
   def get_card_score(card)
