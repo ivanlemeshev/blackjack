@@ -17,27 +17,6 @@ class Game
     run
   end
 
-  def self.print_message(message)
-    length = message.length
-    line = '=' * (length + 4)
-    puts line
-    puts "| #{message} |"
-    puts line
-  end
-
-  def self.print_new_line
-    print "\n"
-  end
-
-  def self.print_double_new_line
-    print "\n\n"
-  end
-
-  def self.get_player_name
-    puts 'Please enter your name.'
-    gets.chomp
-  end
-
   private
 
   def run
@@ -55,8 +34,8 @@ class Game
         print_closed_cards
         print_player_score
         print_bank
-        self.class.print_new_line
-        self.class.print_message('Open cards.')
+        Output::print_new_line
+        Output::print_message('Open cards.')
         self.game_over = true
       end
     end
@@ -64,7 +43,7 @@ class Game
     open_cards
 
     if (self.player.balance > 0 && self.dealer.balance > 0)
-      self.class.print_message('Press any key to continue...')
+      Output::print_message('Press any key to continue...')
       gets
     end
   end
@@ -73,7 +52,7 @@ class Game
     print_closed_cards
     print_player_score
     print_bank
-    self.class.print_new_line
+    Output::print_new_line
 
     puts "What do you want to do?"
     puts 'Enter "pass" to pass the move.' unless self.player_passed_the_move
@@ -82,17 +61,17 @@ class Game
 
     command = gets.chomp
 
-    self.class.print_new_line
+    Output::print_new_line
 
     if command == 'pass' && !self.player_passed_the_move
-      self.class.print_message('You pass the move.')
+      Output::print_message('You pass the move.')
       self.player_passed_the_move = true
     elsif command == 'card' && !self.player_took_the_card
-      self.class.print_message('You get one card.')
+      Output::print_message('You get one card.')
       self.player.add_cards(self.deck.deal_cards(1))
       self.player_took_the_card = true
     else
-      self.class.print_message('Open cards.')
+      Output::print_message('Open cards.')
       self.game_over = true
     end
   end
@@ -101,17 +80,17 @@ class Game
     print_closed_cards
     print_player_score
     print_bank
-    self.class.print_new_line
+    Output::print_new_line
 
     if dealer.score >= 18 && !self.dealer_passed_the_move
-      self.class.print_message('Dealer pass the move.')
+      Output::print_message('Dealer pass the move.')
       self.dealer_passed_the_move = true
     elsif !self.dealer_took_the_card
-      self.class.print_message('Dealer get one card.')
+      Output::print_message('Dealer get one card.')
       self.dealer.add_cards(self.deck.deal_cards(1))
       self.dealer_took_the_card = true
     else
-      self.class.print_message('Open cards.')
+      Output::print_message('Open cards.')
       self.game_over = true
     end
   end
@@ -121,24 +100,24 @@ class Game
     print_dealer_score
     print_player_score
     print_bank
-    self.class.print_new_line
+    Output::print_new_line
 
     if self.dealer.score == self.player.score
-      self.class.print_message('Drawn game.')
+      Output::print_message('Drawn game.')
       amount = self.bank / 2.0
       self.dealer.take_money(amount)
       self.player.take_money(amount)
     elsif self.dealer.score == 21
-      self.class.print_message('Dealer win!')
+      Output::print_message('Dealer win!')
       self.dealer.take_money(self.bank)
     elsif self.player.score == 21
-      self.class.print_message('You win!')
+      Output::print_message('You win!')
       self.player.take_money(self.bank)
     elsif (21 - self.player.score).abs < (21 - self.dealer.score).abs
-      self.class.print_message('You win!')
+      Output::print_message('You win!')
       self.player.take_money(self.bank)
     else
-      self.class.print_message('Dealer win!')
+      Output::print_message('Dealer win!')
       self.dealer.take_money(self.bank)
     end
 
@@ -146,10 +125,10 @@ class Game
     self.player.clear_cards
     self.dealer.clear_cards
 
-    self.class.print_new_line
+    Output::print_new_line
     puts "Your balance: #{self.player.balance}"
     puts "Dealer balance: #{self.dealer.balance}"
-    self.class.print_new_line
+    Output::print_new_line
   end
 
   def deal_cards
@@ -165,19 +144,19 @@ class Game
   end
 
   def print_closed_cards
-    self.class.print_new_line
+    Output::print_new_line
     self.dealer.cards.each { |card| printf('%4s', '*') }
-    self.class.print_double_new_line
+    Output::print_double_new_line
     self.player.cards.each { |card| printf('%4s', "#{card.value}#{card.suit}") }
-    self.class.print_double_new_line
+    Output::print_double_new_line
   end
 
   def print_opened_cards
-    self.class.print_new_line
+    Output::print_new_line
     self.dealer.cards.each { |card| printf('%4s', "#{card.value}#{card.suit}") }
-    self.class.print_double_new_line
+    Output::print_double_new_line
     self.player.cards.each { |card| printf('%4s', "#{card.value}#{card.suit}") }
-    self.class.print_double_new_line
+    Output::print_double_new_line
   end
 
   def print_player_score
