@@ -1,13 +1,27 @@
-module Output
+module GameOutput
+  protected
+
+  ADDITIONAL_CHAR_COUNT = 4
+
   def show_message(message)
     print_new_line
     print_message(message)
     print_new_line
   end
 
-  protected
+  def greeting
+    show_message('WELCOME TO BLACKJACK GAME!')
+  end
 
-  ADDITIONAL_CHAR_COUNT = 4
+  def game_over
+    show_message('GAME OVER!')
+    exit
+  end
+
+  def show_commands
+    puts "Enter 'n' to start a new game."
+    puts "Enter 'q' to quit."
+  end
 
   def print_message(message)
     length = message.length
