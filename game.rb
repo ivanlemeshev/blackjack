@@ -31,7 +31,8 @@ class Game
       dealer_move
 
       if self.player.cards.size == 3 && self.dealer.cards.size == 3
-        print_closed_cards
+        @dealer.show_closed_cards
+        @player.show_opened_cards
         print_player_score
         print_bank
         Output::print_new_line
@@ -49,7 +50,8 @@ class Game
   end
 
   def player_move
-    print_closed_cards
+    @dealer.show_closed_cards
+    @player.show_opened_cards
     print_player_score
     print_bank
     Output::print_new_line
@@ -77,7 +79,8 @@ class Game
   end
 
   def dealer_move
-    print_closed_cards
+    @dealer.show_closed_cards
+    @player.show_opened_cards
     print_player_score
     print_bank
     Output::print_new_line
@@ -96,7 +99,8 @@ class Game
   end
 
   def open_cards
-    print_opened_cards
+    @dealer.show_opened_cards
+    @player.show_opened_cards
     print_dealer_score
     print_player_score
     print_bank
@@ -141,22 +145,6 @@ class Game
     self.bank += Dealer::BET_AMOUNT
     self.player.make_bet
     self.bank += Player::BET_AMOUNT
-  end
-
-  def print_closed_cards
-    Output::print_new_line
-    self.dealer.cards.each { |card| printf('%4s', '*') }
-    Output::print_double_new_line
-    self.player.cards.each { |card| printf('%4s', "#{card.value}#{card.suit}") }
-    Output::print_double_new_line
-  end
-
-  def print_opened_cards
-    Output::print_new_line
-    self.dealer.cards.each { |card| printf('%4s', "#{card.value}#{card.suit}") }
-    Output::print_double_new_line
-    self.player.cards.each { |card| printf('%4s', "#{card.value}#{card.suit}") }
-    Output::print_double_new_line
   end
 
   def print_player_score

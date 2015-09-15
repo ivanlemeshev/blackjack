@@ -14,8 +14,4 @@ class Output
   def self.print_double_new_line
     print "\n\n"
   end
-
-  def self.ask_name
-    puts 'Please enter your name.'
-  end
 end

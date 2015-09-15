@@ -27,4 +27,14 @@ class User
   def take_money(amount)
     @balance += amount
   end
+
+  def show_closed_cards
+    @cards.each { printf('%4s', '*') }
+    print "\n"
+  end
+
+  def show_opened_cards
+    @cards.each { |card| printf('%4s', "#{card.value}#{card.suit}") }
+    print "\n"
+  end
 end
