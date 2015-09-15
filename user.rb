@@ -65,4 +65,9 @@ class User
   def open_cards
     Output.print_message('Open cards.')
   end
+
+  def win(bank)
+    Output.print_message("#{@name} win!")
+    take_money(bank)
+  end
 end

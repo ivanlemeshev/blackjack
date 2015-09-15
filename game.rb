@@ -4,8 +4,6 @@ class Game
   GAME_DEAL_CARDS_COUNT = 1
 
   attr_accessor :bank, :game_over
-  attr_accessor :player_passed_the_move, :dealer_passed_the_move
-  attr_accessor :player_took_the_card, :dealer_took_the_card
   attr_reader :player, :dealer, :deck
 
   def initialize(deck, dealer, player)
@@ -14,10 +12,6 @@ class Game
     @player = player
     @bank = 0
     @game_over = false
-    @player_passed_the_move = false
-    @dealer_passed_the_move = false
-    @player_took_the_card = false
-    @dealer_took_the_card = false
     run
   end
 
@@ -117,27 +111,9 @@ class Game
 
   def open_cards
     show_info
+    determine_winner
+    clear_bank
 
-    if @dealer.score == @player.score
-      Output.print_message('Drawn game.')
-      amount = @bank / 2.0
-      @dealer.take_money(amount)
-      @player.take_money(amount)
-    elsif @dealer.score == WIN_SCORE
-      Output.print_message("#{@dealer.name} win!")
-      @dealer.take_money(@bank)
-    elsif @player.score == WIN_SCORE
-      Output.print_message("#{@player.name} win!")
-      @player.take_money(@bank)
-    elsif (WIN_SCORE - @player.score).abs < (WIN_SCORE - @dealer.score).abs
-      Output.print_message("#{@player.name} win!")
-      @player.take_money(@bank)
-    else
-      Output.print_message("#{@dealer.name} win!")
-      @dealer.take_money(@bank)
-    end
-
-    self.bank = 0
     @player.clear_cards
     @dealer.clear_cards
 
@@ -145,10 +121,25 @@ class Game
     @dealer.show_balance
   end
 
-  def player_win?
+  def determine_winner
+    if drawn?
+      Output.print_message('Drawn game.')
+      amount = @bank / 2.0
+      @dealer.take_money(amount)
+      @player.take_money(amount)
+    elsif player_win?
+      @player.win(@bank)
+    else
+      @dealer.win(@bank)
+    end
   end
 
-  def dealer_win?
+  def player_win?
+    @player.score == WIN_SCORE || (WIN_SCORE - @player.score).abs < (WIN_SCORE - @dealer.score).abs
+  end
+
+  def drawn?
+    @dealer.score == @player.score
   end
 
   def show_info
@@ -158,6 +149,10 @@ class Game
     @dealer.show_score if @game_over
     @player.show_score
     show_bank
+  end
+
+  def clear_bank
+    self.bank = 0
   end
 
   def show_bank
