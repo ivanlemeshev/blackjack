@@ -1,4 +1,7 @@
 class Game
+  START_DEAL_CARDS_COUNT = 2
+  GAME_DEAL_CARDS_COUNT = 1
+
   attr_accessor :bank, :game_over
   attr_accessor :player_passed_the_move, :dealer_passed_the_move
   attr_accessor :player_took_the_card, :dealer_took_the_card
@@ -62,7 +65,7 @@ class Game
       self.player_passed_the_move = true
     elsif command == 'card' && !self.player_took_the_card
       Output::print_message('You get one card.')
-      self.player.add_cards(self.deck.deal_cards(1))
+      self.player.add_cards(self.deck.deal_cards(GAME_DEAL_CARDS_COUNT))
       self.player_took_the_card = true
     else
       Output::print_message('Open cards.')
@@ -119,8 +122,8 @@ class Game
   end
 
   def deal_cards
-    self.player.add_cards(self.deck.deal_cards(2))
-    self.dealer.add_cards(self.deck.deal_cards(2))
+    self.player.add_cards(self.deck.deal_cards(START_DEAL_CARDS_COUNT))
+    self.dealer.add_cards(self.deck.deal_cards(START_DEAL_CARDS_COUNT))
   end
 
   def make_bets
