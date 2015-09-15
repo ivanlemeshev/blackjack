@@ -31,11 +31,7 @@ class Game
       dealer_move
 
       if self.player.cards.size == 3 && self.dealer.cards.size == 3
-        @dealer.show_closed_cards
-        @player.show_opened_cards
-        @player.show_score
-        show_bank
-        Output::print_new_line
+        show_info
         Output::print_message('Open cards.')
         self.game_over = true
       end
@@ -50,11 +46,7 @@ class Game
   end
 
   def player_move
-    @dealer.show_closed_cards
-    @player.show_opened_cards
-    @player.show_score
-    show_bank
-    Output::print_new_line
+    show_info
 
     puts "What do you want to do?"
     puts 'Enter "pass" to pass the move.' unless self.player_passed_the_move
@@ -79,11 +71,7 @@ class Game
   end
 
   def dealer_move
-    @dealer.show_closed_cards
-    @player.show_opened_cards
-    @player.show_score
-    show_bank
-    Output::print_new_line
+    show_info
 
     if dealer.score >= 18 && !self.dealer_passed_the_move
       Output::print_message('Dealer pass the move.')
@@ -99,12 +87,7 @@ class Game
   end
 
   def open_cards
-    @dealer.show_opened_cards
-    @player.show_opened_cards
-    @dealer.show_score
-    @player.show_score
-    show_bank
-    Output::print_new_line
+    show_info
 
     if self.dealer.score == self.player.score
       Output::print_message('Drawn game.')
@@ -145,6 +128,15 @@ class Game
     self.bank += Dealer::BET_AMOUNT
     self.player.make_bet
     self.bank += Player::BET_AMOUNT
+  end
+
+  def show_info
+    @dealer.show_closed_cards unless @game_over
+    @dealer.show_opened_cards if @game_over
+    @player.show_opened_cards
+    @dealer.show_score if @game_over
+    @player.show_score
+    show_bank
   end
 
   def show_bank
