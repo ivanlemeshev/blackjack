@@ -116,8 +116,8 @@ class Game
     @player.clear_cards
     @dealer.clear_cards
 
-    puts "Your balance: #{@player.balance}"
-    puts "Dealer balance: #{@dealer.balance}"
+    @player.show_balance
+    @dealer.show_balance
   end
 
   def deal_cards

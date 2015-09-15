@@ -41,4 +41,8 @@ class User
   def show_score
     puts "#{@name}'s score: #{score}"
   end
+
+  def show_balance
+    puts "#{@name}'s balance: #{@balance}"
+  end
 end
