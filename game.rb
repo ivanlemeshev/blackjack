@@ -122,14 +122,14 @@ class Game
   end
 
   def deal_cards
-    self.player.add_cards(self.deck.deal_cards(START_DEAL_CARDS_COUNT))
-    self.dealer.add_cards(self.deck.deal_cards(START_DEAL_CARDS_COUNT))
+    @player.add_cards(@deck.deal_cards(START_DEAL_CARDS_COUNT))
+    @dealer.add_cards(@deck.deal_cards(START_DEAL_CARDS_COUNT))
   end
 
   def make_bets
-    self.dealer.make_bet
+    @dealer.make_bet
     self.bank += Dealer::BET_AMOUNT
-    self.player.make_bet
+    @player.make_bet
     self.bank += Player::BET_AMOUNT
   end
 
