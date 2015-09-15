@@ -22,6 +22,8 @@ dealer = Dealer.new('Dealer')
 
 until dealer.balance == 0 || player.balance == 0
   Game.new(Deck.new, dealer, player)
+  Output.print_message('Press any key to play a new game...')
+  gets
 end
 
 Output.print_message('GAME OVER!')

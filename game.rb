@@ -20,27 +20,13 @@ class Game
   def run
     deal_cards
     make_bets
-
     until @game_over
       player_move
-
       break if @game_over
-
       dealer_move
-
-      if @player.cards.size == 3 && @dealer.cards.size == 3
-        show_info
-        Output.print_message('Open cards.')
-        self.game_over = true
-      end
+      stop_game if players_have_max_cards_count?
     end
-
     open_cards
-
-    if (self.player.balance > 0 && self.dealer.balance > 0)
-      Output.print_message('Press any key to continue...')
-      gets
-    end
   end
 
   def deal_cards
@@ -59,54 +45,22 @@ class Game
     show_info
     ask_player_command
     command = gets.chomp
-    process_player_command(command)
-  end
-
-  def ask_player_command
-    puts 'What do you want to do?'
-    puts 'Enter "pass" to pass the move.' unless @player.passed_the_move
-    puts 'Enter "card" to get one card.' unless @player.took_the_card
-    puts 'Enter "open" to open cards.'
-  end
-
-  def process_player_command(command)
-    if player_can_pass?(command)
-      @player.pass_move
-    elsif player_can_take_card?(command)
-      @player.take_card(@deck.deal_cards(GAME_DEAL_CARDS_COUNT))
-    else
-      @player.open_cards
-      self.game_over = true
-    end
-  end
-
-  def player_can_pass?(command)
-    command == 'pass' && !@player.passed_the_move
-  end
-
-  def player_can_take_card?(command)
-    command == 'card' && !@player.took_the_card
+    process_player_move(command)
   end
 
   def dealer_move
     show_info
-
-    if dealer_can_pass?
-      @dealer.pass_move
-    elsif dealer_can_take_card?
-      @dealer.take_card(@deck.deal_cards(GAME_DEAL_CARDS_COUNT))
-    else
-      @dealer.open_cards
-      self.game_over = true
-    end
+    process_dealer_move
   end
 
-  def dealer_can_pass?
-    @dealer.score >= 18 && !@dealer.passed_the_move
+  def stop_game
+    show_info
+    Output.print_message('Open cards.')
+    self.game_over = true
   end
 
-  def dealer_can_take_card?
-    !@dealer.took_the_card
+  def players_have_max_cards_count?
+    @player.cards.size == 3 && @dealer.cards.size == 3
   end
 
   def open_cards
@@ -119,6 +73,51 @@ class Game
 
     @player.show_balance
     @dealer.show_balance
+  end
+
+  def ask_player_command
+    puts 'What do you want to do?'
+    puts 'Enter "pass" to pass the move.' unless @player.passed_the_move
+    puts 'Enter "card" to get one card.' unless @player.took_the_card
+    puts 'Enter "open" to open cards.'
+  end
+
+  def process_player_move(command)
+    if player_can_pass?(command)
+      @player.pass_move
+    elsif player_can_take_card?(command)
+      @player.take_card(@deck.deal_cards(GAME_DEAL_CARDS_COUNT))
+    else
+      @player.open_cards
+      self.game_over = true
+    end
+  end
+
+  def process_dealer_move
+    if dealer_can_pass?
+      @dealer.pass_move
+    elsif dealer_can_take_card?
+      @dealer.take_card(@deck.deal_cards(GAME_DEAL_CARDS_COUNT))
+    else
+      @dealer.open_cards
+      self.game_over = true
+    end
+  end
+
+  def player_can_pass?(command)
+    command == 'pass' && !@player.passed_the_move
+  end
+
+  def player_can_take_card?(command)
+    command == 'card' && !@player.took_the_card
+  end
+
+  def dealer_can_pass?
+    @dealer.score >= 18 && !@dealer.passed_the_move
+  end
+
+  def dealer_can_take_card?
+    !@dealer.took_the_card
   end
 
   def determine_winner
@@ -135,7 +134,15 @@ class Game
   end
 
   def player_win?
-    @player.score == WIN_SCORE || (WIN_SCORE - @player.score).abs < (WIN_SCORE - @dealer.score).abs
+    @player.score == WIN_SCORE || player_has_less_score_difference?
+  end
+
+  def player_has_less_score_difference?
+    score_difference(@player.score) < score_difference(@dealer.score)
+  end
+
+  def score_difference(score)
+    (WIN_SCORE - score).abs
   end
 
   def drawn?
