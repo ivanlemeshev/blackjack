@@ -1,24 +1,23 @@
-class Output
-  def self.print_message(message)
-    length = message.length
-    line = '=' * (length + 4)
-    puts line
-    puts "| #{message} |"
-    puts line
-  end
-
-  def self.print_message_with_new_lines(message)
+module Output
+  def show_message(message)
     print_new_line
     print_message(message)
     print_new_line
   end
 
-  def self.print_new_line
-    print "\n"
+  protected
+
+  ADDITIONAL_CHAR_COUNT = 4
+
+  def print_message(message)
+    length = message.length
+    line = '=' * (length + ADDITIONAL_CHAR_COUNT)
+    puts line
+    puts "| #{message} |"
+    puts line
   end
 
-  def self.print_double_new_line
-    print_new_line
-    print_new_line
+  def print_new_line
+    print "\n"
   end
 end
