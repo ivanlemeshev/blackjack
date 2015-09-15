@@ -5,8 +5,7 @@ require_relative 'hand'
 require_relative 'user'
 require_relative 'dealer'
 require_relative 'player'
-require_relative 'game_input'
-require_relative 'game_output'
+require_relative 'game_io'
 require_relative 'game'
 
 Game.new

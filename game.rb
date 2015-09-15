@@ -1,13 +1,11 @@
 class Game
-  include GameInput
-  include GameOutput
+  include GameIO
 
   def initialize
     game_greeting
     @player = Player.new(player_name)
     player_greeting(@player.name)
     @dealer = Dealer.new
-    @hand = Hand.new
     trap('INT') { exit_game }
     show_base_commands
     while (code = prompt)
@@ -33,6 +31,7 @@ class Game
     start_new_game
     @bank = 0
     @game_over = false
+    @hand = Hand.new
     make_bets
     deal_cards
     play_game
@@ -90,6 +89,7 @@ class Game
   def show_balances
     @player.show_balance
     @dealer.show_balance
+    puts
   end
 
   def show_info
@@ -110,7 +110,7 @@ class Game
 
   def determine_winner
     player_score = @hand.score(@player.cards)
-    dealer_score = @hand.score(@player.cards)
+    dealer_score = @hand.score(@dealer.cards)
     if @hand.drawn?(player_score, dealer_score)
       drawn_game
       players_take_money(@bank / 2.0)

@@ -32,8 +32,7 @@ class Hand
   end
 
   def player_win?(player_score, dealer_score)
-    has_less_difference = player_less_difference(player_score, dealer_score)
-    @hand.win_score?(player_score) || has_less_difference
+    win_score?(player_score) || player_less_difference?(player_score, dealer_score)
   end
 
   def player_less_difference?(player_score, dealer_score)
