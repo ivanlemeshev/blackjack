@@ -1,4 +1,6 @@
 class Message
+  ADDITIONAL_CHAR_COUNT = 4
+
   def self.show(message)
     puts
     print_message(message)
@@ -13,10 +15,6 @@ class Message
     new_line
     new_line
   end
-
-  private
-
-  ADDITIONAL_CHAR_COUNT = 4
 
   def self.print_message(message)
     length = message.length
