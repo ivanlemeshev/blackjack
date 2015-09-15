@@ -33,8 +33,8 @@ class Game
       if self.player.cards.size == 3 && self.dealer.cards.size == 3
         @dealer.show_closed_cards
         @player.show_opened_cards
-        print_player_score
-        print_bank
+        @player.show_score
+        show_bank
         Output::print_new_line
         Output::print_message('Open cards.')
         self.game_over = true
@@ -52,8 +52,8 @@ class Game
   def player_move
     @dealer.show_closed_cards
     @player.show_opened_cards
-    print_player_score
-    print_bank
+    @player.show_score
+    show_bank
     Output::print_new_line
 
     puts "What do you want to do?"
@@ -81,8 +81,8 @@ class Game
   def dealer_move
     @dealer.show_closed_cards
     @player.show_opened_cards
-    print_player_score
-    print_bank
+    @player.show_score
+    show_bank
     Output::print_new_line
 
     if dealer.score >= 18 && !self.dealer_passed_the_move
@@ -101,9 +101,9 @@ class Game
   def open_cards
     @dealer.show_opened_cards
     @player.show_opened_cards
-    print_dealer_score
-    print_player_score
-    print_bank
+    @dealer.show_score
+    @player.show_score
+    show_bank
     Output::print_new_line
 
     if self.dealer.score == self.player.score
@@ -147,15 +147,7 @@ class Game
     self.bank += Player::BET_AMOUNT
   end
 
-  def print_player_score
-    puts "Your score: #{self.player.score}"
-  end
-
-  def print_dealer_score
-    puts "Dealer score: #{self.dealer.score}"
-  end
-
-  def print_bank
-    puts "Bank: #{self.bank}"
+  def show_bank
+    puts "Bank: #{@bank}"
   end
 end

@@ -37,4 +37,8 @@ class User
     @cards.each { |card| printf('%4s', "#{card.value}#{card.suit}") }
     print "\n"
   end
+
+  def show_score
+    puts "#{@name}'s score: #{score}"
+  end
 end
