@@ -13,7 +13,7 @@ class Game
 
   protected
 
-  attr_accessor :bank
+  attr_accessor :bank, :game_over
 
   def process_prompt(code)
     if code == 'n'
@@ -26,22 +26,24 @@ class Game
   end
 
   def start_game
-    @bank = 0
-    @game_over = false
     name = player_name
     @player = Player.new(name)
-    show_message("Hi, #{name}")
+    Message.show("Hi, #{name}")
     @dealer = Dealer.new
     @hand = Hand.new
 
     until @player.balance == 0 || @dealer.balance == 0
+      @bank = 0
+      @game_over = false
       make_bets
       deal_cards
-      show_info
-      # player_move
-      # dealer move
-      # open_cards
-      # determine_winner
+      until @game_over
+        player_move
+        break if @game_over || players_cards_limit_reached?
+        dealer_move
+        stop_game if players_cards_limit_reached?
+      end
+      open_cards
     end
   end
 
@@ -56,13 +58,78 @@ class Game
   end
 
   def show_info
-    show_cards_back(@dealer.cards) unless @game_over
-    show_cards_face(@dealer.cards) if @game_over
-    show_cards_face(@player.cards)
+    @dealer.show_cards_back unless @game_over
+    @dealer.show_cards_face if @game_over
+    @player.show_cards_face
 
     show_score(@dealer.name, @hand.score(@dealer.cards)) if @game_over
     show_score(@player.name, @hand.score(@player.cards))
 
     show_bank(@bank)
+  end
+
+  def player_move
+    show_info
+    @player.process_move(command(@player), @hand)
+    self.game_over = @player.opened_cards
+  end
+
+  def dealer_move
+    show_info
+    @dealer.process_move(@hand)
+    self.game_over = @dealer.opened_cards
+  end
+
+  def players_cards_limit_reached?
+    @player.cards_limit_reached? && @dealer.cards_limit_reached?
+  end
+
+  def stop_game
+    show_info
+    self.game_over = true
+  end
+
+  def open_cards
+    self.game_over = true
+
+    confirm_open_cards
+    show_info
+    determine_winner
+    clear_bank
+
+    @player.clear_cards
+    @dealer.clear_cards
+
+    @player.show_balance
+    @dealer.show_balance
+  end
+
+  def determine_winner
+    if drawn?
+      Message.show('Drawn game.')
+      amount = @bank / 2.0
+      @dealer.take_money(amount)
+      @player.take_money(amount)
+    elsif player_win?
+      @player.win(@bank)
+    else
+      @dealer.win(@bank)
+    end
+  end
+
+  def player_win?
+    @hand.win_score?(@player.cards) || player_has_less_score_difference?
+  end
+
+  def player_has_less_score_difference?
+    @hand.score_difference(@dealer.cards) < @hand.score_difference(@dealer.cards)
+  end
+
+  def drawn?
+    @hand.score(@dealer.cards) == @hand.score(@player.cards)
+  end
+
+  def clear_bank
+    self.bank = 0
   end
 end

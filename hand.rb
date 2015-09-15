@@ -27,12 +27,12 @@ class Hand
     add_additional_ace_score(total_score, ace_count)
   end
 
-  def win_score?
-    score == WIN_SCORE
+  def win_score?(cards)
+    score(cards) == WIN_SCORE
   end
 
-  def score_difference
-    (WIN_SCORE - score).abs
+  def score_difference(cards)
+    (WIN_SCORE - score(cards)).abs
   end
 
   protected
