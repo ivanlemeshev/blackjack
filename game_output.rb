@@ -14,6 +14,14 @@ module GameOutput
     exit
   end
 
+  def start_new_game
+    Message.show('Starting a new game.')
+  end
+
+  def drawn_game
+    Message.show('Drawn game.')
+  end
+
   def show_base_commands
     puts "Enter 'n' to start a new game."
     puts "Enter 'q' to quit."

@@ -27,12 +27,17 @@ class Hand
     add_additional_ace_score(total_score, ace_count)
   end
 
-  def win_score?(cards)
-    score(cards) == WIN_SCORE
+  def drawn?(player_score, dealer_score)
+    player_score == dealer_score
   end
 
-  def score_difference(cards)
-    (WIN_SCORE - score(cards)).abs
+  def player_win?(player_score, dealer_score)
+    has_less_difference = player_less_difference(player_score, dealer_score)
+    @hand.win_score?(player_score) || has_less_difference
+  end
+
+  def player_less_difference?(player_score, dealer_score)
+    score_difference(player_score) < score_difference(dealer_score)
   end
 
   protected
@@ -53,5 +58,13 @@ class Hand
       total_score += ace_score if total_score + ace_score <= WIN_SCORE + 5
     end
     total_score
+  end
+
+  def win_score?(score)
+    WIN_SCORE == score
+  end
+
+  def score_difference(score)
+    (WIN_SCORE - score).abs
   end
 end
