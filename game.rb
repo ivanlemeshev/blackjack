@@ -51,27 +51,50 @@ class Game
 
   def player_move
     show_info
-
-    puts 'What do you want to do?'
-    puts 'Enter "pass" to pass the move.' unless self.player_passed_the_move
-    puts 'Enter "card" to get one card.' unless self.player_took_the_card
-    puts 'Enter "open" to open cards.'
-
+    ask_player_command
     command = gets.chomp
+    process_player_command(command)
+  end
 
-    Output.print_new_line
+  def ask_player_command
+    puts 'What do you want to do?'
+    puts 'Enter "pass" to pass the move.' unless @player_passed_the_move
+    puts 'Enter "card" to get one card.' unless @player_took_the_card
+    puts 'Enter "open" to open cards.'
+  end
 
-    if command == 'pass' && !@player_passed_the_move
-      Output.print_message('You pass the move.')
-      self.player_passed_the_move = true
-    elsif command == 'card' && !@player_took_the_card
-      Output.print_message('You get one card.')
-      @player.add_cards(@deck.deal_cards(GAME_DEAL_CARDS_COUNT))
-      self.player_took_the_card = true
+  def process_player_command(command)
+    if player_can_pass?(command)
+      player_pass_move
+    elsif player_can_take_card?(command)
+      player_take_card
     else
-      Output.print_message('Open cards.')
-      self.game_over = true
+      player_open_cards
     end
+  end
+
+  def player_can_pass?(command)
+    command == 'pass' && !@player_passed_the_move
+  end
+
+  def player_can_take_card?(command)
+    command == 'card' && !@player_took_the_card
+  end
+
+  def player_pass_move
+    Output.print_message("#{@player.name} passed the move.")
+    self.player_passed_the_move = true
+  end
+
+  def player_take_card
+    Output.print_message("#{@player.name} got one card.")
+    @player.add_cards(@deck.deal_cards(GAME_DEAL_CARDS_COUNT))
+    self.player_took_the_card = true
+  end
+
+  def player_open_cards
+    Output.print_message('Open cards.')
+    self.game_over = true
   end
 
   def dealer_move
