@@ -1,0 +1,10 @@
+AllCops:
+  RunRailsCops: false
+  DisplayCopsNames: true
+  StyleGuideCopsOnly: false
+
+Style/StringLiterals:
+  Enabled: false
+
+Style/Documentation:
+  Enabled: false
