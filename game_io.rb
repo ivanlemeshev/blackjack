@@ -17,11 +17,7 @@ module GameIO
   end
 
   def command(user)
-    puts "\nWhat do you want to do?"
-    puts "Enter 'p' to pass the move." unless user.passed_the_move
-    puts "Enter 't' to get one card." unless user.took_the_card
-    puts "Enter 'o' to open cards."
-    puts "Enter 'q' to quit."
+    ask_user_move(user)
     code = prompt
     exit_game if code == 'q'
     fail unless %w(p t o).include? code
@@ -29,6 +25,14 @@ module GameIO
   rescue
     puts 'Command is invalid. Please try again.'
     retry
+  end
+
+  def ask_user_move(user)
+    puts "\nWhat do you want to do?"
+    puts "Enter 'p' to pass the move." unless user.passed_the_move
+    puts "Enter 't' to get one card." unless user.took_the_card
+    puts "Enter 'o' to open cards."
+    puts "Enter 'q' to quit."
   end
 
   def confirm_open_cards
